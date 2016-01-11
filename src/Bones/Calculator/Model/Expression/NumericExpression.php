@@ -2,7 +2,7 @@
 
 namespace Bones\Calculator\Model\Expression;
 
-class NumericExpression
+class NumericExpression implements ExpressionInterface
 {
     public function __construct($numericValue)
     {
