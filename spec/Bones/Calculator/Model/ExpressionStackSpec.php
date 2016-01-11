@@ -3,6 +3,7 @@
 namespace spec\Bones\Calculator\Model;
 
 use Bones\Calculator\Model\Expression\AdditionExpression;
+use Bones\Calculator\Model\Expression\MultiplicationExpression;
 use Bones\Calculator\Model\Expression\NumericExpression;
 use Bones\Calculator\Model\Expression\SubtractionExpression;
 use PhpSpec\ObjectBehavior;
@@ -32,6 +33,7 @@ class ExpressionStackSpec extends ObjectBehavior
     function it_should_return_the_first_heaviest_operation_position_in_the_stack()
     {
         $this->addExpression(new SubtractionExpression());
+        $this->addExpression(new MultiplicationExpression());
         $this->addExpression(new AdditionExpression());
 
         $this->getFirstHeaviestOperationPositionInStack()->shouldBeLike(1);

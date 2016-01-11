@@ -5,7 +5,7 @@ namespace Bones\Calculator\Model\Expression;
 class SubtractionExpression extends AbstractOperation implements OperationInterface
 {
 
-    const WEIGHT = 2;
+    const WEIGHT = 1;
 
     public function getValue()
     {

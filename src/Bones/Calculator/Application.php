@@ -33,18 +33,20 @@ class Application
         while ($this->expressionStack->getExpressionStackSize() > 1) {
 
             $operationIndex = $this->expressionStack->getFirstHeaviestOperationPositionInStack();
-            $operation = $this->expressionStack->getOperationAt($operationIndex);
+            $precedingValueIndex = $operationIndex - 1;
+            $followingValueIndex = $operationIndex + 1;
 
-            $precedingValue = $this->expressionStack->getExpressionAt($operationIndex - 1);
+            $operation = $this->expressionStack->getOperationAt($operationIndex);
+            $precedingValue = $this->expressionStack->getExpressionAt($precedingValueIndex);
             $operation->setPrecedingValue($precedingValue);
 
-            $followingValue = $this->expressionStack->getExpressionAt($operationIndex + 1);
+            $followingValue = $this->expressionStack->getExpressionAt($followingValueIndex);
             $operation->setFollowingValue($followingValue);
 
             $newNumericValue = $operation->getValue();
 
-            $this->expressionStack->removeExpressionAt($precedingValue);
-            $this->expressionStack->removeExpressionAt($followingValue);
+            $this->expressionStack->removeExpressionAt($precedingValueIndex);
+            $this->expressionStack->removeExpressionAt($followingValueIndex);
             $this->expressionStack->addExpressionAt($operationIndex, $newNumericValue);
             $this->expressionStack->compactStack();
         }

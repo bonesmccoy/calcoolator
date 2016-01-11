@@ -55,7 +55,7 @@ class ExpressionStack
             $expression =  $this->expressionStack[$index];
         }
 
-        if (!($expression instanceof AstractOperation)) {
+        if (!($expression instanceof AbstractOperation)) {
             throw new \Exception("$index index doesn't exists or not of the type Operation");
         }
 

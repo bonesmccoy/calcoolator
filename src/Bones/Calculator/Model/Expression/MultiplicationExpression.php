@@ -4,7 +4,7 @@ namespace Bones\Calculator\Model\Expression;
 
 class MultiplicationExpression extends AbstractOperation implements OperationInterface
 {
-    const WEIGHT = 1;
+    const WEIGHT = 2;
 
     public function getValue()
     {

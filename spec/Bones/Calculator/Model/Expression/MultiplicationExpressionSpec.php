@@ -43,6 +43,6 @@ class MultiplicationExpressionSpec extends ObjectBehavior
 
     function it_has_a_weight()
     {
-        $this->getWeight()->shouldReturn(1);
+        $this->getWeight()->shouldReturn(2);
     }
 }

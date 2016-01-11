@@ -42,6 +42,6 @@ class SubtractionExpressionSpec extends ObjectBehavior
 
     function it_has_a_weight()
     {
-        $this->getWeight()->shouldReturn(2);
+        $this->getWeight()->shouldReturn(1);
     }
 }
