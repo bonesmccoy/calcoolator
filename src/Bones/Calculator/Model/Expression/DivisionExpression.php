@@ -5,6 +5,8 @@ namespace Bones\Calculator\Model\Expression;
 class DivisionExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
 {
 
+    const WEIGHT = 2;
+
     public static function create(ExpressionInterface $dividend, ExpressionInterface $divisor)
     {
         $divisionExpression = new DivisionExpression($dividend, $divisor);

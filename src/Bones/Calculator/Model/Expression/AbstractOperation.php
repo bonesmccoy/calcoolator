@@ -23,4 +23,9 @@ abstract class AbstractOperation
         $this->firstValue = $firstValue;
         $this->secondValue = $secondValue;
     }
+
+    public function getWeight()
+    {
+        return static::WEIGHT;
+    }
 }

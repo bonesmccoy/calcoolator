@@ -5,6 +5,8 @@ namespace Bones\Calculator\Model\Expression;
 class SubtractionExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
 {
 
+    const WEIGHT = 2;
+
     public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
     {
         $subtractionExpression = new SubtractionExpression($firstValue, $secondValue);

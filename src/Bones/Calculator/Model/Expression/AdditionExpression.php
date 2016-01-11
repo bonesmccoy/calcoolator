@@ -5,6 +5,8 @@ namespace Bones\Calculator\Model\Expression;
 class AdditionExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
 {
 
+    const WEIGHT = 1;
+
     /**
      * @param ExpressionInterface $firstValue
      * @param ExpressionInterface $secondValue

@@ -36,4 +36,9 @@ class MultiplicationExpressionSpec extends ObjectBehavior
             ->getValue()
             ->shouldBeLike($result);
     }
+
+    function it_has_a_weight()
+    {
+        $this->getWeight()->shouldReturn(1);
+    }
 }

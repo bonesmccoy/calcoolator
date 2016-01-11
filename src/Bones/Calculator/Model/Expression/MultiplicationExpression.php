@@ -4,10 +4,11 @@ namespace Bones\Calculator\Model\Expression;
 
 class MultiplicationExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
 {
+    const WEIGHT = 1;
+
     public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
     {
         $multiplyExpression = new MultiplicationExpression($firstValue, $secondValue);
-
 
         return $multiplyExpression;
     }
