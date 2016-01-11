@@ -15,10 +15,16 @@ class NumericExpressionSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('Bones\Calculator\Model\Expression\NumericExpression');
-        $this->shouldHaveType('Bones\Calculator\Model\Expression\ExpressionInterface');
+        $this->shouldHaveType('Bones\Calculator\Model\Expression\ScalarExpressionInterface');
     }
 
-    function it_should_have_a_value()
+    function it_can_be_constructed_only_with_numeric_values()
+    {
+        $this->beConstructedWith('CIAO');
+        $this->shouldThrow('\InvalidArgumentException')->duringInstantiation();
+    }
+
+    function it_can_be_evaluated()
     {
         $this->beConstructedWith(3);
         $this->getValue()->shouldReturn(3);

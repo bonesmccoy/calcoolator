@@ -1,7 +1,8 @@
 <?php
 namespace Bones\Calculator\Model\Expression;
 
-interface ExpressionInterface
+interface EvaluableInterface
 {
-    public function getValue();
+    public function evaluate(NumericExpression $firstValue, NumericExpression $secondValue);
+
 }

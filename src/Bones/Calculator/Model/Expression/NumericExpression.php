@@ -2,10 +2,15 @@
 
 namespace Bones\Calculator\Model\Expression;
 
-class NumericExpression implements ExpressionInterface
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
+
+class NumericExpression implements ScalarExpressionInterface
 {
     public function __construct($numericValue)
     {
+        if (!is_numeric($numericValue)) {
+            throw new InvalidArgumentException("Only numeric values allowed");
+        }
         $this->value = $numericValue;
     }
 
