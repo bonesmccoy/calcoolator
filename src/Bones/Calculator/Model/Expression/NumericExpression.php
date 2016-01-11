@@ -4,7 +4,7 @@ namespace Bones\Calculator\Model\Expression;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
 
-class NumericExpression implements ScalarExpressionInterface
+class NumericExpression implements ExpressionInterface
 {
     public function __construct($numericValue)
     {

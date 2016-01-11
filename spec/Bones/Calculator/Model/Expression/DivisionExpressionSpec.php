@@ -6,7 +6,7 @@ use Bones\Calculator\Model\Expression\NumericExpression;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class AdditionExpressionSpec extends ObjectBehavior
+class DivisionExpressionSpec extends ObjectBehavior
 {
     function let()
     {
@@ -15,7 +15,7 @@ class AdditionExpressionSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Bones\Calculator\Model\Expression\AdditionExpression');
+        $this->shouldHaveType('Bones\Calculator\Model\Expression\DivisionExpression');
         $this->shouldHaveType('Bones\Calculator\Model\Expression\AbstractOperation');
         $this->shouldHaveType('Bones\Calculator\Model\Expression\ExpressionInterface');
         $this->shouldHaveType('Bones\Calculator\Model\Expression\OperationInterface');
@@ -28,10 +28,10 @@ class AdditionExpressionSpec extends ObjectBehavior
             ->shouldReturnAnInstanceOf('Bones\Calculator\Model\Expression\NumericExpression');
     }
 
-    function it_should_add_two_numbers()
+    function it_should_divide_two_numbers()
     {
-        $result = new NumericExpression(11);
-        $this->beConstructedThrough('create', array(new NumericExpression(5), new NumericExpression(6)));
+        $result = new NumericExpression(5);
+        $this->beConstructedThrough('create', array(new NumericExpression(30), new NumericExpression(6)));
         $this
             ->getValue()
             ->shouldBeLike($result);

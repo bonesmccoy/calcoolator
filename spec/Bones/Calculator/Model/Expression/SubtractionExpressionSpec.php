@@ -8,29 +8,32 @@ use Prophecy\Argument;
 
 class SubtractionExpressionSpec extends ObjectBehavior
 {
+    function let()
+    {
+        $this->beConstructedThrough('create', array(new NumericExpression(10), new NumericExpression(5)));
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('Bones\Calculator\Model\Expression\SubtractionExpression');
+        $this->shouldHaveType('Bones\Calculator\Model\Expression\AbstractOperation');
         $this->shouldHaveType('Bones\Calculator\Model\Expression\ExpressionInterface');
+        $this->shouldHaveType('Bones\Calculator\Model\Expression\OperationInterface');
     }
 
-    function it_can_be_evaulated()
-    {
-        $this->evaluate(new NumericExpression(1), new NumericExpression(2));
-    }
-
-    function it_should_return_a_NumericExpression_object()
+    function it_has_a_value()
     {
         $this
-            ->evaluate(new NumericExpression(2), new NumericExpression(1))
+            ->getValue()
             ->shouldReturnAnInstanceOf('Bones\Calculator\Model\Expression\NumericExpression');
     }
 
     function it_should_subtract_two_numbers()
     {
-        $result = new NumericExpression(3);
+        $result = new NumericExpression(-5);
+        $this->beConstructedThrough('create', array(new NumericExpression(15), new NumericExpression(20)));
         $this
-            ->evaluate(new NumericExpression(2), new NumericExpression(1))
+            ->getValue()
             ->shouldBeLike($result);
     }
 }

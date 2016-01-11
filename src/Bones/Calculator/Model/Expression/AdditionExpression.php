@@ -2,18 +2,39 @@
 
 namespace Bones\Calculator\Model\Expression;
 
-class AdditionExpression implements EvaluableInterface
+class AdditionExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
 {
 
     /**
-     * @param NumericExpression $firstValue
-     * @param NumericExpression $secondValue
+     * @param ExpressionInterface $firstValue
+     * @param ExpressionInterface $secondValue
+     * @return AdditionExpression
+     */
+    public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
+    {
+        $additionExpression = new AdditionExpression($firstValue, $secondValue);
+
+        return $additionExpression;
+    }
+
+    /**
      * @return NumericExpression
      */
-    public function evaluate(NumericExpression $firstValue, NumericExpression $secondValue)
+    public function getValue()
     {
-        $value = $firstValue->getValue() + $secondValue->getValue();
+        $value = $this->getAugend()->getValue() + $this->getAddend()->getValue();
 
         return new NumericExpression($value);
     }
+
+    private function getAugend()
+    {
+        return $this->firstValue;
+    }
+
+    private function getAddend()
+    {
+        return $this->secondValue;
+    }
+
 }

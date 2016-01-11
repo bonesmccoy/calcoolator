@@ -2,17 +2,30 @@
 
 namespace Bones\Calculator\Model\Expression;
 
-class SubtractionExpression implements EvaluableInterface
+class SubtractionExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
 {
-    /**
-     * @param NumericExpression $firstValue
-     * @param NumericExpression $secondValue
-     * @return NumericExpression
-     */
-    public function evaluate(NumericExpression $firstValue, NumericExpression $secondValue)
-    {
-        $scalarResult = $firstValue->getValue() - $secondValue->getValue();
 
-        return new NumericExpression($scalarResult);
+    public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
+    {
+        $subtractionExpression = new SubtractionExpression($firstValue, $secondValue);
+
+        return $subtractionExpression;
+    }
+
+    public function getValue()
+    {
+        $result = $this->getMinvend()->getValue() - $this->getSubstrahend()->getValue();
+
+        return new NumericExpression($result);
+    }
+
+    private function getMinvend()
+    {
+        return $this->firstValue;
+    }
+
+    private function getSubstrahend()
+    {
+        return $this->secondValue;
     }
 }
