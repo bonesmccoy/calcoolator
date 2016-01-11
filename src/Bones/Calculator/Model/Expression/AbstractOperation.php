@@ -3,7 +3,7 @@
 namespace Bones\Calculator\Model\Expression;
 
 
-abstract class AbstractOperation
+abstract class AbstractOperation implements ExpressionInterface
 {
     /**
      * @var ExpressionInterface
@@ -59,8 +59,6 @@ abstract class AbstractOperation
             throw new \InvalidArgumentException();
         }
     }
-
-
 
 
 }

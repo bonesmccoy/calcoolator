@@ -2,6 +2,7 @@
 
 namespace Bones\Calculator;
 
+use Bones\Calculator\Model\Expression\OperationInterface;
 use Bones\Calculator\Model\ExpressionStack;
 
 class Application
@@ -27,49 +28,30 @@ class Application
 
         $input = $this->cleanInput($input);
 
-        $expressionStack = $this->inputParser->parseEquationString($input);
+        $this->expressionStack = $this->inputParser->parseEquationString($input);
 
-        // do while until stack lenght is 1
-        do {
-            //var_dump("STACK",  implode (" | ", $this->stack));
+        while ($this->expressionStack->getExpressionStackSize() > 1) {
 
-            $current_weight = 0;
-            $found_key = null;
-            $value = null;
+            $operationIndex = $this->expressionStack->getFirstHeaviestOperationPositionInStack();
+            $operation = $this->expressionStack->getOperationAt($operationIndex);
 
-            //find the heavyest operation in stack
-            foreach($this->stack as $key => $el) {
-                if ($el instanceof Number) continue;
-                //retrieve the operator with highest height;
-                if ($el->getWeight() > $current_weight) {
-                    $current_weight = $el->getWeight();
-                    $found_key = $key;
-                    $operation = $el;
-                }
-            }
+            $precedingValue = $this->expressionStack->getExpressionAt($operationIndex - 1);
+            $operation->setPrecedingValue($precedingValue);
 
-            //execute it and retrieve a value
-            $first_number = $this->stack[$found_key - 1];
-            $second_number = $this->stack[$found_key + 1];
-            if (!(($first_number instanceof Number) && ($second_number instanceof Number))) {
-                throw new Exception("Malformed input string");
-            }
+            $followingValue = $this->expressionStack->getExpressionAt($operationIndex + 1);
+            $operation->setFollowingValue($followingValue);
 
-            $value = $operation->evaluate($first_number->getValue(), $second_number->getValue() );
+            $newNumericValue = $operation->getValue();
 
-            //substitute the element in the stack with the index of operator with the value found
-            //unset the used values
-            $this->stack[$found_key] = $value;
-            unset($this->stack[$found_key-1]);
-            unset($this->stack[$found_key+1]);
-            //reset the $stack indexes
-            $this->stack = array_values($this->stack);
+            $this->expressionStack->removeExpressionAt($precedingValue);
+            $this->expressionStack->removeExpressionAt($followingValue);
+            $this->expressionStack->addExpressionAt($operationIndex, $newNumericValue);
+            $this->expressionStack->compactStack();
+        }
 
+        return $this->expressionStack->getExpressionAt(0);
 
-        } while ( count($this->stack) > 1 );
-        //var_dump("STACK",  implode (" | ", $this->stack));
-        return $this->stack[0]->getValue();
-    }
+     }
 
     /**
      * @param $input

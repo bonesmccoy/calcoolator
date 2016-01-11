@@ -2,7 +2,7 @@
 
 namespace Bones\Calculator\Model\Expression;
 
-class SubtractionExpression extends AbstractOperation implements ExpressionInterface, OperationInterface
+class SubtractionExpression extends AbstractOperation implements OperationInterface
 {
 
     const WEIGHT = 2;
