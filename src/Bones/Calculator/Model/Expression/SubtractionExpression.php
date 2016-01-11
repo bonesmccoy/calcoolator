@@ -7,15 +7,9 @@ class SubtractionExpression extends AbstractOperation implements ExpressionInter
 
     const WEIGHT = 2;
 
-    public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
-    {
-        $subtractionExpression = new SubtractionExpression($firstValue, $secondValue);
-
-        return $subtractionExpression;
-    }
-
     public function getValue()
     {
+        $this->assertValuesAreValid();
         $result = $this->getMinvend()->getValue() - $this->getSubstrahend()->getValue();
 
         return new NumericExpression($result);
@@ -23,11 +17,11 @@ class SubtractionExpression extends AbstractOperation implements ExpressionInter
 
     private function getMinvend()
     {
-        return $this->firstValue;
+        return $this->precedingValue;
     }
 
     private function getSubstrahend()
     {
-        return $this->secondValue;
+        return $this->followingValue;
     }
 }

@@ -8,10 +8,6 @@ use Prophecy\Argument;
 
 class MultiplicationExpressionSpec extends ObjectBehavior
 {
-    function let()
-    {
-        $this->beConstructedThrough('create', [new NumericExpression(1), new NumericExpression(2)]);
-    }
 
     function it_is_initializable()
     {
@@ -21,8 +17,15 @@ class MultiplicationExpressionSpec extends ObjectBehavior
         $this->shouldHaveType('Bones\Calculator\Model\Expression\OperationInterface');
     }
 
+    function it_should_throw_an_exception_if_values_not_set()
+    {
+        $this->shouldThrow('\InvalidArgumentException')->during('getValue');
+    }
+
     function it_has_a_value()
     {
+        $this->setPrecedingValue(new NumericExpression(5));
+        $this->setFollowingValue(new NumericExpression(10));
         $this
             ->getValue()
             ->shouldReturnAnInstanceOf('Bones\Calculator\Model\Expression\NumericExpression');
@@ -30,8 +33,9 @@ class MultiplicationExpressionSpec extends ObjectBehavior
 
     function it_should_multiply_two_numbers()
     {
-        $result = new NumericExpression(30);
-        $this->beConstructedThrough('create', array(new NumericExpression(5), new NumericExpression(6)));
+        $this->setPrecedingValue(new NumericExpression(5));
+        $this->setFollowingValue(new NumericExpression(10));
+        $result = new NumericExpression(50);
         $this
             ->getValue()
             ->shouldBeLike($result);

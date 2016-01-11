@@ -6,15 +6,9 @@ class MultiplicationExpression extends AbstractOperation implements ExpressionIn
 {
     const WEIGHT = 1;
 
-    public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
-    {
-        $multiplyExpression = new MultiplicationExpression($firstValue, $secondValue);
-
-        return $multiplyExpression;
-    }
-
     public function getValue()
     {
+        $this->assertValuesAreValid();
         $result = $this->getMultiplicand()->getValue() * $this->getMultiplier()->getValue();
 
         return new NumericExpression($result);
@@ -22,11 +16,11 @@ class MultiplicationExpression extends AbstractOperation implements ExpressionIn
 
     public function getMultiplicand()
     {
-        return $this->firstValue;
+        return $this->precedingValue;
     }
 
     public function getMultiplier()
     {
-        return $this->secondValue;
+        return $this->followingValue;
     }
 }

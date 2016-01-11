@@ -8,22 +8,12 @@ class AdditionExpression extends AbstractOperation implements ExpressionInterfac
     const WEIGHT = 1;
 
     /**
-     * @param ExpressionInterface $firstValue
-     * @param ExpressionInterface $secondValue
-     * @return AdditionExpression
-     */
-    public static function create(ExpressionInterface $firstValue, ExpressionInterface $secondValue)
-    {
-        $additionExpression = new AdditionExpression($firstValue, $secondValue);
-
-        return $additionExpression;
-    }
-
-    /**
      * @return NumericExpression
      */
     public function getValue()
     {
+        $this->assertValuesAreValid();
+
         $value = $this->getAugend()->getValue() + $this->getAddend()->getValue();
 
         return new NumericExpression($value);
@@ -31,12 +21,11 @@ class AdditionExpression extends AbstractOperation implements ExpressionInterfac
 
     private function getAugend()
     {
-        return $this->firstValue;
+        return $this->precedingValue;
     }
 
     private function getAddend()
     {
-        return $this->secondValue;
+        return $this->followingValue;
     }
-
 }

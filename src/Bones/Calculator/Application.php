@@ -2,24 +2,32 @@
 
 namespace Bones\Calculator;
 
+use Bones\Calculator\Model\ExpressionStack;
+
 class Application
 {
-    private $stack;
+    /**
+     * @var ExpressionStack
+     */
+    private $expressionStack;
+
+    /**
+     * @var InputParser
+     */
+    private $inputParser;
+
+
+    public function __construct()
+    {
+        $this->inputParser = new InputParser();
+    }
 
 
     public function run($input) {
-        $input = trim($input);
-        $this->stack = array();
 
-        $matches = explode(" ", $input);
+        $input = $this->cleanInput($input);
 
-        foreach($matches as $token){
-            if (empty($matches)) continue;
-            if ($exp = FinalExpression::factory($token)) {
-                $this->stack[] = $exp;
-            }
-
-        }
+        $expressionStack = $this->inputParser->parseEquationString($input);
 
         // do while until stack lenght is 1
         do {
@@ -61,6 +69,17 @@ class Application
         } while ( count($this->stack) > 1 );
         //var_dump("STACK",  implode (" | ", $this->stack));
         return $this->stack[0]->getValue();
+    }
+
+    /**
+     * @param $input
+     * @return string
+     */
+    protected function cleanInput($input)
+    {
+        $input = trim($input);
+
+        return $input;
     }
 
 }
