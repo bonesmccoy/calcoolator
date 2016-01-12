@@ -2,11 +2,21 @@
 
 namespace Bones\Calculator;
 
-use Bones\Calculator\Model\Expression\OperationInterface;
+use Bones\Calculator\Model\Expression\NumericExpression;
 use Bones\Calculator\Model\ExpressionStack;
 
-class Application
+use PhpSpec\ServiceContainer;
+use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class Application extends BaseApplication
 {
+    /**
+     * @var ServiceContainer
+     */
+    private $container;
+
     /**
      * @var ExpressionStack
      */
@@ -21,12 +31,22 @@ class Application
     public function __construct()
     {
         $this->inputParser = new InputParser();
+        $this->container = new ServiceContainer();
+        parent::__construct('calcoolator', '1.0');
+    }
+
+    /**
+     * @return ServiceContainer
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
 
-    public function run($input) {
+    public function doRun(InputInterface $input, OutputInterface $output) {
 
-        $input = $this->cleanInput($input);
+        $input = $this->cleanInput($input->getFirstArgument());
 
         $this->expressionStack = $this->inputParser->parseEquationString($input);
 
@@ -36,24 +56,16 @@ class Application
             $precedingValueIndex = $operationIndex - 1;
             $followingValueIndex = $operationIndex + 1;
 
-            $operation = $this->expressionStack->getOperationAt($operationIndex);
-            $precedingValue = $this->expressionStack->getExpressionAt($precedingValueIndex);
-            $operation->setPrecedingValue($precedingValue);
+            $operationResultExpression = $this->evaluateOperation($operationIndex, $precedingValueIndex, $followingValueIndex);
+            $this->expressionStack->addExpressionAt($operationIndex, $operationResultExpression);
 
-            $followingValue = $this->expressionStack->getExpressionAt($followingValueIndex);
-            $operation->setFollowingValue($followingValue);
-
-            $newNumericValue = $operation->getValue();
-
-            $this->expressionStack->removeExpressionAt($precedingValueIndex);
-            $this->expressionStack->removeExpressionAt($followingValueIndex);
-            $this->expressionStack->addExpressionAt($operationIndex, $newNumericValue);
-            $this->expressionStack->compactStack();
+            $this->reduceExpressionStack($precedingValueIndex, $followingValueIndex);
         }
 
-        return $this->expressionStack->getExpressionAt(0);
+        $returnExpression = $this->expressionStack->getExpressionAt(0);
+        $output->writeln($returnExpression->getValue());
 
-     }
+    }
 
     /**
      * @param $input
@@ -64,6 +76,37 @@ class Application
         $input = trim($input);
 
         return $input;
+    }
+
+    /**
+     * @param $precedingValueIndex
+     * @param $followingValueIndex
+     */
+    private function reduceExpressionStack($precedingValueIndex, $followingValueIndex)
+    {
+        $this->expressionStack->removeExpressionAt($precedingValueIndex);
+        $this->expressionStack->removeExpressionAt($followingValueIndex);
+        $this->expressionStack->compactStack();
+    }
+
+    /**
+     * @param $operationIndex
+     * @param $precedingValueIndex
+     * @param $followingValueIndex
+     * @return NumericExpression
+     *
+     * @throws \Exception
+     */
+    private function evaluateOperation($operationIndex, $precedingValueIndex, $followingValueIndex)
+    {
+        $operation = $this->expressionStack->getOperationAt($operationIndex);
+        $precedingValue = $this->expressionStack->getExpressionAt($precedingValueIndex);
+        $operation->setPrecedingValue($precedingValue);
+
+        $followingValue = $this->expressionStack->getExpressionAt($followingValueIndex);
+        $operation->setFollowingValue($followingValue);
+
+        return $operation->getValue();
     }
 
 }

@@ -17,4 +17,12 @@ class ApplicationSpec extends ObjectBehavior
     {
         $this->run('1 + 2')->shouldBeLike(new NumericExpression(3));
     }
+
+
+    function it_should_manage_a_complex_input_string()
+    {
+        $this->run('1 + 2 * 3 - 2')->shouldBeLike(new NumericExpression(5));
+    }
+
+
 }
