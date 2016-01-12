@@ -2,13 +2,11 @@
 
 namespace Bones\Calculator\Console;
 
-use Bones\Calculator\Model\Expression\NumericExpression;
-use Bones\Calculator\Model\ExpressionStack;
 
+use Bones\Calculator\Command\CalculatorCommand;
 use PhpSpec\ServiceContainer;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends BaseApplication
 {
@@ -17,35 +15,37 @@ class Application extends BaseApplication
      */
     private $container;
 
-    /**
-     * @var Calculator
-     */
-    private $calculator;
 
     public function __construct()
     {
-        $this->container = new ServiceContainer();
-        $this->calculator = new Calculator();
         parent::__construct('calcoolator', '1.0');
     }
 
-    /**
-     * @return ServiceContainer
-     */
-    public function getContainer()
+    protected function getCommandName(InputInterface $input)
     {
-        return $this->container;
+        // This should return the name of your command.
+        return CalculatorCommand::NAME;
     }
 
 
-    public function doRun(InputInterface $input, OutputInterface $output) {
+    protected function getDefaultCommands()
+    {
+        // Keep the core default commands to have the HelpCommand
+        // which is used when using the --help option
+        $defaultCommands = parent::getDefaultCommands();
 
+        $defaultCommands[] = new CalculatorCommand();
 
-        $stringExpression = $input->getFirstArgument();
-        $calculationResult = $this->calculator->calculate($stringExpression);
+        return $defaultCommands;
+    }
 
-        $output->writeln($calculationResult->getValue());
+    public function getDefinition()
+    {
+        $inputDefinition = parent::getDefinition();
+        // clear out the normal first argument, which is the command name
+        $inputDefinition->setArguments();
 
+        return $inputDefinition;
     }
 
 

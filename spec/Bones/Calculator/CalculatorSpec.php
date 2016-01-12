@@ -26,4 +26,12 @@ class CalculatorSpec extends ObjectBehavior
         $this
             ->calculate($inputString)->shouldBeLike(new NumericExpression(3));
     }
+
+    function it_should_parse_expressions_with_negative_numbers()
+    {
+        $this->calculate("1 + -2")->shouldBeLike(new NumericExpression(-1));
+        $this->calculate("1 - -2")->shouldBeLike(new NumericExpression(3));
+        $this->calculate("-1 + -2")->shouldBeLike(new NumericExpression(-3));
+        $this->calculate("-1 - -2")->shouldBeLike(new NumericExpression(1));
+    }
 }
