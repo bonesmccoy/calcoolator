@@ -31,6 +31,7 @@ class AdditionExpressionSpec extends ObjectBehavior
             ->shouldReturnAnInstanceOf('Bones\Calculator\Model\Expression\NumericExpression');
     }
 
+
     function it_should_add_two_numbers()
     {
         $this->setPrecedingValue(new NumericExpression(5));
