@@ -1,14 +1,14 @@
 <?php
 
-namespace Bones\Calculator;
+namespace Bones\Calculator\Model;
 
 use Bones\Calculator\Model\ExpressionFactory;
 use Bones\Calculator\Model\ExpressionStack;
 
-class InputParser
+class StringExpressionParser
 {
 
-    public function parseEquationString($inputString)
+    public function parseString($inputString)
     {
         if (empty($inputString)) {
             throw new \InvalidArgumentException("Invalid Input String");

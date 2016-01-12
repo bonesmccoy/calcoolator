@@ -2,53 +2,40 @@
 
 namespace Bones\Calculator;
 
-use Bones\Calculator\Model\Expression\NumericExpression;
+
+use Bones\Calculator\Model\Expression\ExpressionInterface;
 use Bones\Calculator\Model\ExpressionStack;
+use Bones\Calculator\Model\StringExpressionParser;
 
-use PhpSpec\ServiceContainer;
-use Symfony\Component\Console\Application as BaseApplication;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
-class Application extends BaseApplication
+class Calculator
 {
-    /**
-     * @var ServiceContainer
-     */
-    private $container;
-
     /**
      * @var ExpressionStack
      */
     private $expressionStack;
 
     /**
-     * @var InputParser
+     * @var StringExpressionParser
      */
     private $inputParser;
 
 
     public function __construct()
     {
-        $this->inputParser = new InputParser();
-        $this->container = new ServiceContainer();
-        parent::__construct('calcoolator', '1.0');
+        $this->inputParser = new StringExpressionParser();
+
     }
 
     /**
-     * @return ServiceContainer
+     * @param $inputString
+     * @return ExpressionInterface
+     * @throws \Exception
      */
-    public function getContainer()
+    public function calculate($inputString)
     {
-        return $this->container;
-    }
+        $inputString = $this->cleanInput($inputString);
 
-
-    public function doRun(InputInterface $input, OutputInterface $output) {
-
-        $input = $this->cleanInput($input->getFirstArgument());
-
-        $this->expressionStack = $this->inputParser->parseEquationString($input);
+        $this->expressionStack = $this->inputParser->parseString($inputString);
 
         while ($this->expressionStack->getExpressionStackSize() > 1) {
 
@@ -62,10 +49,9 @@ class Application extends BaseApplication
             $this->reduceExpressionStack($precedingValueIndex, $followingValueIndex);
         }
 
-        $returnExpression = $this->expressionStack->getExpressionAt(0);
-        $output->writeln($returnExpression->getValue());
-
+        return $this->expressionStack->getExpressionAt(0);
     }
+
 
     /**
      * @param $input
